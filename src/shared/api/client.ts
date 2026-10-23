@@ -1,4 +1,4 @@
-import axios, { isCancel } from 'axios'
+import axios, { isAxiosError, isCancel } from 'axios'
 import type { z } from 'zod'
 import { env } from '@/shared/config/env'
 import { ApiError, toApiError } from './errors'
@@ -11,9 +11,31 @@ export const http = axios.create({
   paramsSerializer: { indexes: null },
 })
 
+declare module 'axios' {
+  interface AxiosRequestConfig {
+    skipSessionExpiry?: boolean
+  }
+}
+
+type SessionExpiredListener = (error: ApiError) => void
+let sessionExpiredListener: SessionExpiredListener | null = null
+
+export function onSessionExpired(listener: SessionExpiredListener) {
+  sessionExpiredListener = listener
+  return () => {
+    if (sessionExpiredListener === listener) sessionExpiredListener = null
+  }
+}
+
 http.interceptors.response.use(
   (response) => response,
-  (error: unknown) => (isCancel(error) ? Promise.reject(error) : Promise.reject(toApiError(error))),
+  (error: unknown) => {
+    if (isCancel(error)) return Promise.reject(error)
+    const apiError = toApiError(error)
+    const skip = isAxiosError(error) && error.config?.skipSessionExpiry
+    if (!skip && apiError.status === 401) sessionExpiredListener?.(apiError)
+    return Promise.reject(apiError)
+  },
 )
 
 export function parseResponse<T extends z.ZodType>(schema: T, data: unknown): z.infer<T> {

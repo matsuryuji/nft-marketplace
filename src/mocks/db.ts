@@ -1,11 +1,14 @@
 import { createNftFixtures, creatorFixtures, type CreatorRecord, type NftRecord } from './fixtures/nfts'
+import { userFixtures, type SessionRecord, type UserRecord } from './fixtures/users'
 
-const STORAGE_KEY = 'nft-mock-db:v8'
+const STORAGE_KEY = 'nft-mock-db:v9'
 
 export type MockDatabase = {
   nfts: NftRecord[]
   creators: CreatorRecord[]
   newsletterSubscribers: { email: string; subscribedAt: string }[]
+  users: UserRecord[]
+  sessions: SessionRecord[]
 }
 
 function createInitialState(): MockDatabase {
@@ -13,6 +16,8 @@ function createInitialState(): MockDatabase {
     nfts: createNftFixtures(),
     creators: structuredClone(creatorFixtures),
     newsletterSubscribers: [{ email: 'colecionador@kurio.test', subscribedAt: '2026-09-01T12:00:00.000Z' }],
+    users: structuredClone(userFixtures),
+    sessions: [],
   }
 }
 

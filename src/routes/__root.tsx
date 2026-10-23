@@ -1,5 +1,8 @@
 import { createRootRouteWithContext, HeadContent, Outlet, useMatches } from '@tanstack/react-router'
 import type { QueryClient } from '@tanstack/react-query'
+import { authSearchSchema } from '@/features/auth/auth-search'
+import { AuthDialog } from '@/features/auth/components/auth-dialog'
+import { SessionWatcher } from '@/features/auth/components/session-watcher'
 import { AppFooter } from '@/shared/components/app-footer'
 import { AppHeader } from '@/shared/components/app-header'
 import { MobileBottomNav } from '@/shared/components/mobile-bottom-nav'
@@ -10,6 +13,7 @@ type RouterContext = {
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({
+  validateSearch: authSearchSchema,
   component: RootLayout,
 })
 
@@ -39,6 +43,8 @@ function RootLayout() {
       </main>
       <AppFooter className={hideMobileNav ? 'mb-36' : undefined} />
       {!hideMobileNav && <MobileBottomNav />}
+      <AuthDialog />
+      <SessionWatcher />
       <Toaster position="top-center" />
     </div>
   )

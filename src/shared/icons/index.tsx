@@ -89,3 +89,15 @@ export function FacebookBrandIcon(props: IconProps) {
     </svg>
   )
 }
+
+export function HideIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 19 15" fill="none" aria-hidden="true" focusable="false" {...props}>
+      <path d="M4.21611 11.9834C2.11 10.7667 0.75 8.93337 0.75 7.32503C0.75 4.5917 4.66 1.2417 9.48611 1.2417C11.46 1.2417 13.2922 1.80003 14.7656 2.6667" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" stroke="currentColor"/>
+      <path d="M16.8997 4.38379C17.7412 5.32546 18.2314 6.36712 18.2314 7.32546C18.2314 10.0588 14.312 13.4088 9.48584 13.4088C8.6264 13.4088 7.78679 13.3005 7.00195 13.1088" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" stroke="currentColor"/>
+      <path d="M7.37607 9.1809C6.81413 8.69007 6.49963 8.0209 6.50246 7.3234C6.49868 5.86923 7.83224 4.68757 9.48124 4.68507C10.2746 4.6834 11.0358 4.9609 11.5968 5.4559" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" stroke="currentColor"/>
+      <path d="M12.4229 7.79102C12.2019 8.86768 11.2471 9.71185 10.0269 9.90935" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" stroke="currentColor"/>
+      <path d="M16.9394 0.75L2.04175 13.895" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" stroke="currentColor"/>
+    </svg>
+  )
+}

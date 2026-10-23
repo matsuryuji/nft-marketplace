@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { Heart, House, ScanSearch, UserRound } from 'lucide-react'
+import { useSession } from '@/features/auth/session'
 import { CartIcon } from '@/shared/icons'
 import { SearchDialog } from './search-dialog'
 
@@ -7,6 +8,8 @@ const itemClass =
   'flex size-11 items-center justify-center rounded-full text-foreground/70 transition-colors hover:text-highlight'
 
 export function MobileBottomNav() {
+  const { user } = useSession()
+
   return (
     <nav
       aria-label="Navegação inferior"
@@ -48,7 +51,13 @@ export function MobileBottomNav() {
           </Link>
         </li>
         <li>
-          <Link to="/profile" aria-label="Perfil" className={itemClass}>
+          <Link
+            to={user ? '/profile' : '.'}
+            search={user ? undefined : (prev) => ({ ...prev, auth: 'login' as const })}
+            resetScroll={!user ? false : undefined}
+            aria-label={user ? 'Perfil' : 'Entrar'}
+            className={itemClass}
+          >
             <UserRound className="size-5" aria-hidden="true" />
           </Link>
         </li>

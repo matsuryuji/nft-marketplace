@@ -1,5 +1,6 @@
 import { Link, useRouterState } from '@tanstack/react-router'
-import { CartIcon, LoginIcon, SearchIcon } from '@/shared/icons'
+import { AccountMenu } from '@/features/auth/components/account-menu'
+import { CartIcon, SearchIcon } from '@/shared/icons'
 import { cn } from '@/shared/lib/utils'
 import { Button } from '@/shared/ui/button'
 import { SearchDialog } from './search-dialog'
@@ -72,12 +73,7 @@ export function AppHeader() {
               <CartIcon className="size-5" />
             </Link>
           </Button>
-          <Button size="sm" asChild className="ml-2">
-            <Link to="/login">
-              <LoginIcon className="size-4" />
-              Entrar
-            </Link>
-          </Button>
+          <AccountMenu />
         </div>
       </div>
     </header>
