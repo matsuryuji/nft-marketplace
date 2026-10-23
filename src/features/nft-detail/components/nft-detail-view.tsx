@@ -2,6 +2,9 @@ import { useState } from 'react'
 import { Link, useRouter } from '@tanstack/react-router'
 import { ChevronLeft, Heart, Star } from 'lucide-react'
 import { toast } from 'sonner'
+import { useAddToCart } from '@/features/cart/queries'
+import { toApiError } from '@/shared/api/errors'
+import { useMobileBarHeight } from '@/shared/hooks/use-mobile-bar-height'
 import type { NftDetail, NftEdition } from '@/shared/contracts/nft'
 import { CartIcon } from '@/shared/icons'
 import { formatEth, toDecimal } from '@/shared/lib/eth'
@@ -36,6 +39,7 @@ function pickEdition(nft: NftDetail, requestedEditionId?: string) {
 
 export function NftDetailView({ nft, requestedEditionId, onEditionChange }: NftDetailViewProps) {
   const router = useRouter()
+  const purchaseBarRef = useMobileBarHeight<HTMLDivElement>()
   const selected = pickEdition(nft, requestedEditionId)
   const requestedUnavailable = Boolean(requestedEditionId) && requestedEditionId !== selected?.id
   const [quantity, setQuantity] = useState(1)
@@ -46,6 +50,27 @@ export function NftDetailView({ nft, requestedEditionId, onEditionChange }: NftD
   const unitPrice = selected?.price ?? nft.floorPrice
   const total = toDecimal(unitPrice).times(effectiveQuantity).toFixed()
   const soldOut = !selected
+  const addToCart = useAddToCart()
+  const addSelected = (destination: 'cart' | 'stay') => {
+    if (!selected || addToCart.isPending) return
+    addToCart.mutate(
+      { nftId: nft.id, editionId: selected.id, quantity: effectiveQuantity },
+      {
+        onSuccess: () => {
+          if (destination === 'cart') {
+            void router.navigate({ to: '/cart' })
+            return
+          }
+          toast.success(`${nft.name} (${selected.label}) foi adicionado ao carrinho.`, {
+            action: { label: 'Ver carrinho', onClick: () => void router.navigate({ to: '/cart' }) },
+          })
+        },
+        onError: (error) =>
+          toast.error('Não foi possível adicionar ao carrinho', { description: toApiError(error).message }),
+      },
+    )
+  }
+  const purchaseDisabled = soldOut || addToCart.isPending
   const updateQuantity = (update: (current: number) => number) =>
     setQuantity((current) => update(Math.min(current, Math.max(maxQuantity, 1))))
 
@@ -161,11 +186,11 @@ export function NftDetailView({ nft, requestedEditionId, onEditionChange }: NftD
             <div className="flex gap-2">
               <button
                 type="button"
-                disabled={soldOut}
-                onClick={() => notifyPending('A compra')}
+                disabled={purchaseDisabled}
+                onClick={() => addSelected('cart')}
                 className="h-9 rounded-[4px] bg-primary px-8 text-xs font-bold text-primary-foreground uppercase transition-opacity hover:opacity-90 disabled:opacity-50"
               >
-                {soldOut ? 'Esgotado' : 'Comprar'}
+                {soldOut ? 'Esgotado' : addToCart.isPending ? 'Adicionando…' : 'Comprar'}
               </button>
               <button
                 type="button"
@@ -210,7 +235,7 @@ export function NftDetailView({ nft, requestedEditionId, onEditionChange }: NftD
         <RelatedCarousel nftId={nft.id} />
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 z-40 rounded-t-[28px] border-t border-surface-strong bg-surface px-5 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] md:hidden">
+      <div ref={purchaseBarRef} className="fixed inset-x-0 bottom-0 z-40 rounded-t-[28px] border-t border-surface-strong bg-surface px-5 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] md:hidden">
         <div className="flex items-start justify-between gap-3">
           <QuantityStepper
             value={effectiveQuantity}
@@ -227,16 +252,16 @@ export function NftDetailView({ nft, requestedEditionId, onEditionChange }: NftD
         <div className="mt-1 flex gap-3">
           <button
             type="button"
-            disabled={soldOut}
-            onClick={() => notifyPending('A compra')}
+            disabled={purchaseDisabled}
+            onClick={() => addSelected('cart')}
             className="h-11 flex-1 rounded-full bg-primary text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
           >
-            {soldOut ? 'Esgotado' : 'Comprar NFT'}
+            {soldOut ? 'Esgotado' : addToCart.isPending ? 'Adicionando…' : 'Comprar NFT'}
           </button>
           <button
             type="button"
-            disabled={soldOut}
-            onClick={() => notifyPending('O carrinho')}
+            disabled={purchaseDisabled}
+            onClick={() => addSelected('stay')}
             aria-label="Adicionar ao carrinho"
             className="flex size-11 items-center justify-center rounded-full bg-surface-strong text-primary disabled:opacity-50"
           >

@@ -1,6 +1,7 @@
 import { Link, useRouterState } from '@tanstack/react-router'
 import { AccountMenu } from '@/features/auth/components/account-menu'
-import { CartIcon, SearchIcon } from '@/shared/icons'
+import { CartLink } from '@/features/cart/components/cart-link'
+import { SearchIcon } from '@/shared/icons'
 import { cn } from '@/shared/lib/utils'
 import { Button } from '@/shared/ui/button'
 import { SearchDialog } from './search-dialog'
@@ -68,11 +69,7 @@ export function AppHeader() {
               </Button>
             }
           />
-          <Button variant="ghost" size="icon" asChild>
-            <Link to="/cart" aria-label="Carrinho">
-              <CartIcon className="size-5" />
-            </Link>
-          </Button>
+          <CartLink className="size-9 rounded-md transition-colors hover:bg-accent" />
           <AccountMenu />
         </div>
       </div>

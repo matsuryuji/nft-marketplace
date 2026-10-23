@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { Heart, House, ScanSearch, UserRound } from 'lucide-react'
 import { useSession } from '@/features/auth/session'
-import { CartIcon } from '@/shared/icons'
+import { CartLink } from '@/features/cart/components/cart-link'
 import { SearchDialog } from './search-dialog'
 
 const itemClass =
@@ -46,9 +46,7 @@ export function MobileBottomNav() {
           />
         </li>
         <li>
-          <Link to="/cart" aria-label="Carrinho" className={itemClass}>
-            <CartIcon className="size-5" />
-          </Link>
+          <CartLink className={itemClass} />
         </li>
         <li>
           <Link

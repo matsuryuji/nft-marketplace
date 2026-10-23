@@ -12,11 +12,20 @@ import {
   sessionCookie,
   toUser,
 } from '../lib/session'
+import { CART_COOKIE } from '../fixtures/coupons'
 import { SESSION_COOKIE } from '../fixtures/users'
+import { clearedCartCookie, mergeGuestCart } from '../lib/cart'
 import { scenarioStore } from '../scenarios'
 
 function fieldErrors(issues: { path: PropertyKey[]; message: string }[]) {
   return Object.fromEntries(issues.map((issue) => [String(issue.path[0]), issue.message]))
+}
+
+function sessionHeaders(cookies: Record<string, string>, userId: string, session: { token: string; expiresAt: string }) {
+  const headers = new Headers()
+  headers.append('Set-Cookie', sessionCookie(session.token, session.expiresAt))
+  if (mergeGuestCart(cookies[CART_COOKIE], userId)) headers.append('Set-Cookie', clearedCartCookie)
+  return headers
 }
 
 const serviceUnavailable = () =>
@@ -31,7 +40,7 @@ export const authHandlers = [
     return HttpResponse.json({ user: toUser(result.user), expiresAt: result.expiresAt })
   }),
 
-  http.post(`${env.apiUrl}/session`, async ({ request }) => {
+  http.post(`${env.apiUrl}/session`, async ({ request, cookies }) => {
     const network = await simulateNetwork(request)
     if (network) return network
     if (scenarioStore.current === 'server-error') return serviceUnavailable()
@@ -51,7 +60,7 @@ export const authHandlers = [
     const session = createSession(user.id)
     return HttpResponse.json(
       { user: toUser(user), expiresAt: session.expiresAt },
-      { headers: { 'Set-Cookie': sessionCookie(session.token, session.expiresAt) } },
+      { headers: sessionHeaders(cookies, user.id, session) },
     )
   }),
 
@@ -62,7 +71,7 @@ export const authHandlers = [
     return new HttpResponse(null, { status: 204, headers: { 'Set-Cookie': clearedSessionCookie } })
   }),
 
-  http.post(`${env.apiUrl}/accounts`, async ({ request }) => {
+  http.post(`${env.apiUrl}/accounts`, async ({ request, cookies }) => {
     const network = await simulateNetwork(request)
     if (network) return network
     if (scenarioStore.current === 'server-error') return serviceUnavailable()
@@ -99,7 +108,7 @@ export const authHandlers = [
     const session = createSession(user.id)
     return HttpResponse.json(
       { user: toUser(user), expiresAt: session.expiresAt },
-      { status: 201, headers: { 'Set-Cookie': sessionCookie(session.token, session.expiresAt) } },
+      { status: 201, headers: sessionHeaders(cookies, user.id, session) },
     )
   }),
 ]

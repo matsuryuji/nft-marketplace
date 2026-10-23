@@ -1,5 +1,6 @@
 import { setupWorker } from 'msw/browser'
 import { db } from './db'
+import { CART_COOKIE } from './fixtures/coupons'
 import { SESSION_COOKIE } from './fixtures/users'
 import { expireAllSessions } from './lib/session'
 import { handlers } from './handlers'
@@ -19,6 +20,7 @@ const mockControls = {
     db.reset()
     scenarioStore.set('default')
     document.cookie = `${SESSION_COOKIE}=; Path=/; Max-Age=0`
+    document.cookie = `${CART_COOKIE}=; Path=/; Max-Age=0`
   },
   expireSession() {
     expireAllSessions()

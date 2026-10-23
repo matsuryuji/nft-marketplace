@@ -101,3 +101,13 @@ export function HideIcon(props: IconProps) {
     </svg>
   )
 }
+
+export function DeleteIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 18 20" fill="none" aria-hidden="true" focusable="false" {...props}>
+      <path d="M15.4246 7.59C15.4246 15.609 16.5789 19.2338 8.81507 19.2338C1.05031 19.2338 2.2284 15.609 2.2284 7.59" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" stroke="currentColor"/>
+      <path d="M16.9005 4.51571H0.75" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" stroke="currentColor"/>
+      <path d="M12.25 4.51571C12.25 4.51571 12.7786 0.75 8.82427 0.75C4.87093 0.75 5.39951 4.51571 5.39951 4.51571" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" stroke="currentColor"/>
+    </svg>
+  )
+}

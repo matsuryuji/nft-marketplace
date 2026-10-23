@@ -11,6 +11,10 @@ export const privateKeys = {
   user: (userId: string) => [...privateKeys.all, userId] as const,
 }
 
+export const guestKeys = {
+  all: ['guest'] as const,
+}
+
 export const SESSION_REVALIDATE_MS = 30_000
 
 export const sessionQuery = () =>
@@ -26,7 +30,10 @@ export function clearPrivateData(queryClient: QueryClient) {
 
 export function applySession(queryClient: QueryClient, session: Session | null) {
   const previous = queryClient.getQueryData<Session | null>(sessionKeys.current())
-  if (previous?.user.id !== session?.user.id) clearPrivateData(queryClient)
+  if (previous?.user.id !== session?.user.id) {
+    clearPrivateData(queryClient)
+    queryClient.removeQueries({ queryKey: guestKeys.all })
+  }
   queryClient.setQueryData(sessionKeys.current(), session)
 }
 

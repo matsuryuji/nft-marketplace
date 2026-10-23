@@ -14,7 +14,7 @@ const detailSearchSchema = z.object({
 
 export const Route = createFileRoute('/nfts/$nftId')({
   validateSearch: detailSearchSchema,
-  staticData: { mobileNav: 'hidden' },
+  staticData: { mobileNav: 'purchase-bar' },
   loader: ({ context, params }) => {
     void context.queryClient.prefetchQuery(nftDetailQuery(params.nftId))
   },

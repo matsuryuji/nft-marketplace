@@ -1,7 +1,25 @@
 import { createNftFixtures, creatorFixtures, type CreatorRecord, type NftRecord } from './fixtures/nfts'
 import { userFixtures, type SessionRecord, type UserRecord } from './fixtures/users'
 
-const STORAGE_KEY = 'nft-mock-db:v9'
+export type CartItemRecord = {
+  id: string
+  nftId: string
+  editionId: string
+  quantity: number
+  baselinePrice: string
+  addedAt: string
+}
+
+export type CartRecord = {
+  id: string
+  userId: string | null
+  items: CartItemRecord[]
+  couponCode: string | null
+  version: number
+  updatedAt: string
+}
+
+const STORAGE_KEY = 'nft-mock-db:v10'
 
 export type MockDatabase = {
   nfts: NftRecord[]
@@ -9,6 +27,7 @@ export type MockDatabase = {
   newsletterSubscribers: { email: string; subscribedAt: string }[]
   users: UserRecord[]
   sessions: SessionRecord[]
+  carts: CartRecord[]
 }
 
 function createInitialState(): MockDatabase {
@@ -18,6 +37,7 @@ function createInitialState(): MockDatabase {
     newsletterSubscribers: [{ email: 'colecionador@kurio.test', subscribedAt: '2026-09-01T12:00:00.000Z' }],
     users: structuredClone(userFixtures),
     sessions: [],
+    carts: [],
   }
 }
 

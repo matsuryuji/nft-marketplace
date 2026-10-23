@@ -19,13 +19,13 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 
 declare module '@tanstack/react-router' {
   interface StaticDataRouteOption {
-    mobileNav?: 'hidden'
+    mobileNav?: 'hidden' | 'purchase-bar'
   }
 }
 
 function RootLayout() {
-  const hideMobileNav = useMatches({
-    select: (matches) => matches.some((match) => match.staticData.mobileNav === 'hidden'),
+  const mobileNav = useMatches({
+    select: (matches) => [...matches].reverse().find((match) => match.staticData.mobileNav)?.staticData.mobileNav,
   })
 
   return (
@@ -41,8 +41,12 @@ function RootLayout() {
       <main id="main-content" tabIndex={-1} className="flex-1 focus:outline-none">
         <Outlet />
       </main>
-      <AppFooter className={hideMobileNav ? 'mb-36' : undefined} />
-      {!hideMobileNav && <MobileBottomNav />}
+      <AppFooter
+        className={
+          mobileNav === 'purchase-bar' ? 'mb-[var(--mobile-bar-height,0px)]' : mobileNav === 'hidden' ? 'mb-0' : undefined
+        }
+      />
+      {!mobileNav && <MobileBottomNav />}
       <AuthDialog />
       <SessionWatcher />
       <Toaster position="top-center" />
