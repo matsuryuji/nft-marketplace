@@ -3,6 +3,7 @@ import { toast } from 'sonner'
 import { cartKey } from '@/features/cart/queries'
 import { nftKeys } from '@/features/catalog/queries'
 import { checkoutKeys } from '@/features/checkout/queries'
+import { favoritesKey } from '@/features/favorites/queries'
 import { homeKeys } from '@/features/home/queries'
 import type { Cart } from '@/shared/contracts/cart'
 import type { Order } from '@/shared/contracts/checkout'
@@ -40,6 +41,7 @@ function patchNftData(data: unknown, event: NftUpdatedEvent): unknown {
 
 export function applyNftUpdated(queryClient: QueryClient, userId: string | null, event: NftUpdatedEvent) {
   queryClient.setQueriesData({ queryKey: nftKeys.all }, (data: unknown) => patchNftData(data, event))
+  if (userId) queryClient.setQueryData(favoritesKey(userId), (data: unknown) => patchNftData(data, event))
   queryClient.setQueryData<HomeContent>(homeKeys.content(), (home) => {
     if (!home?.spotlight || home.spotlight.nft.id !== event.data.nftId) return home
     return { ...home, spotlight: { ...home.spotlight, nft: patchSummary(home.spotlight.nft, event) } }

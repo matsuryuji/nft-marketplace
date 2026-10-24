@@ -45,7 +45,7 @@ export type CartRecord = {
   updatedAt: string
 }
 
-const STORAGE_KEY = 'nft-mock-db:v12'
+const STORAGE_KEY = 'nft-mock-db:v13'
 
 export type MockDatabase = {
   nfts: NftRecord[]
@@ -59,6 +59,7 @@ export type MockDatabase = {
   quotes: QuoteRecord[]
   orders: OrderRecord[]
   scenarioFlags: string[]
+  favorites: { userId: string; nftId: string; createdAt: string }[]
 }
 
 function createInitialState(): MockDatabase {
@@ -74,6 +75,10 @@ function createInitialState(): MockDatabase {
     quotes: [],
     orders: [],
     scenarioFlags: [],
+    favorites: [
+      { userId: 'user-1', nftId: 'nft-002', createdAt: '2026-09-20T12:00:00.000Z' },
+      { userId: 'user-1', nftId: 'nft-007', createdAt: '2026-09-22T12:00:00.000Z' },
+    ],
   }
 }
 

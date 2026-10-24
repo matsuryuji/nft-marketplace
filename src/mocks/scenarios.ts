@@ -11,6 +11,7 @@ export const scenarioIds = [
   'order-timeout',
   'checkout-price-change',
   'checkout-sold-out',
+  'favorites-error',
 ] as const
 
 export type ScenarioId = (typeof scenarioIds)[number]
@@ -42,6 +43,7 @@ export const scenarios: Record<ScenarioId, ScenarioDefinition> = {
     latency: { min: 120, max: 350 },
   },
   'checkout-sold-out': { description: 'A edição do primeiro item esgota ao confirmar a compra', latency: { min: 120, max: 350 } },
+  'favorites-error': { description: 'Favoritar e desfavoritar respondem HTTP 503 (rollback otimista)', latency: { min: 300, max: 600 } },
 }
 
 const STORAGE_KEY = 'nft-mock-scenario'

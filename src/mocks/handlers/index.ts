@@ -1,6 +1,7 @@
 import { authHandlers } from './auth'
 import { cartHandlers } from './cart'
 import { checkoutHandlers } from './checkout'
+import { favoriteHandlers } from './favorites'
 import { homeHandlers } from './home'
 import { nftHandlers } from './nfts'
 import { profileHandlers } from './profile'
@@ -12,6 +13,7 @@ export const handlers = [
   ...checkoutHandlers,
   ...walletHandlers,
   ...profileHandlers,
+  ...favoriteHandlers,
   ...homeHandlers,
   ...nftHandlers,
 ]

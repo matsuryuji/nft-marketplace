@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useRouter } from '@tanstack/react-router'
-import { ChevronLeft, Heart, Star } from 'lucide-react'
+import { ChevronLeft, Star } from 'lucide-react'
 import { toast } from 'sonner'
 import { useAddToCart } from '@/features/cart/queries'
+import { FavoriteButton } from '@/features/favorites/components/favorite-button'
 import { toApiError } from '@/shared/api/errors'
 import { useMobileBarHeight } from '@/shared/hooks/use-mobile-bar-height'
 import type { NftDetail, NftEdition } from '@/shared/contracts/nft'
@@ -22,9 +23,6 @@ type NftDetailViewProps = {
   requestedEditionId?: string
   onEditionChange: (editionId: string) => void
 }
-
-const notifyPending = (action: string) =>
-  toast.info(`${action} será habilitado na próxima etapa.`, { id: 'pending-action' })
 
 function pickEdition(nft: NftDetail, requestedEditionId?: string) {
   const requested = nft.editions.find((edition) => edition.id === requestedEditionId)
@@ -123,14 +121,7 @@ export function NftDetailView({ nft, requestedEditionId, onEditionChange }: NftD
             >
               <ChevronLeft className="size-4" aria-hidden="true" />
             </button>
-            <button
-              type="button"
-              onClick={() => notifyPending('Favoritar')}
-              aria-label="Favoritar"
-              className="flex size-9 items-center justify-center rounded-full bg-background/40 text-primary"
-            >
-              <Heart className="size-4" aria-hidden="true" />
-            </button>
+            <FavoriteButton nft={nft} variant="round" />
           </div>
           <NftGallery images={nft.images} name={nft.name} />
         </div>
@@ -206,14 +197,7 @@ export function NftDetailView({ nft, requestedEditionId, onEditionChange }: NftD
               >
                 {soldOut ? 'Esgotado' : addToCart.isPending ? 'Adicionando…' : 'Comprar'}
               </button>
-              <button
-                type="button"
-                onClick={() => notifyPending('Favoritar')}
-                className="flex h-9 items-center gap-1.5 rounded-[4px] border border-primary px-3 text-xs text-foreground transition-colors hover:bg-primary/10"
-              >
-                <Heart className="size-4 text-primary" aria-hidden="true" />
-                Favoritar
-              </button>
+              <FavoriteButton nft={nft} variant="outline" />
             </div>
           </div>
 

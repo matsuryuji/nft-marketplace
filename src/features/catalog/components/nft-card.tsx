@@ -1,4 +1,5 @@
 import { Link } from '@tanstack/react-router'
+import { FavoriteButton } from '@/features/favorites/components/favorite-button'
 import type { NftRarity, NftSummary } from '@/shared/contracts/nft'
 import { formatEth } from '@/shared/lib/eth'
 import { Skeleton } from '@/shared/ui/skeleton'
@@ -30,6 +31,7 @@ export function NftCard({ nft, priority = false }: NftCardProps) {
           decoding="async"
           className="aspect-square w-full rounded-md object-cover transition-transform duration-300 group-hover:scale-[1.02]"
         />
+        <FavoriteButton nft={nft} variant="card" className="absolute! top-3 right-3" />
         {tag && (
           <span className="absolute top-2 left-2 rounded-tl-md rounded-br-md bg-primary px-2.5 py-1 text-[10px] font-bold text-primary-foreground uppercase">
             {tag}
