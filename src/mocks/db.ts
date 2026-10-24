@@ -1,5 +1,8 @@
 import { createNftFixtures, creatorFixtures, type CreatorRecord, type NftRecord } from './fixtures/nfts'
+import type { Buyer, OrderLine, Quote } from '@/shared/contracts/checkout'
+import type { CartSummary } from '@/shared/contracts/cart'
 import { userFixtures, type SessionRecord, type UserRecord } from './fixtures/users'
+import { walletFixtures, type WalletRecord, type WalletSessionRecord } from './fixtures/wallets'
 
 export type CartItemRecord = {
   id: string
@@ -8,6 +11,29 @@ export type CartItemRecord = {
   quantity: number
   baselinePrice: string
   addedAt: string
+}
+
+export type QuoteRecord = Quote & { userId: string; cartId: string }
+
+export type OrderRecord = {
+  id: string
+  userId: string
+  idempotencyKey: string
+  payloadHash: string
+  quoteId: string
+  status: 'pending' | 'confirmed' | 'refused'
+  plannedOutcome: 'confirmed' | 'refused'
+  version: number
+  items: OrderLine[]
+  coupon: { code: string; description: string } | null
+  summary: CartSummary
+  buyer: Buyer
+  wallet: { label: string; address: string; network: WalletRecord['network']; provider: WalletRecord['provider'] }
+  transactionHash: string | null
+  failureReason: string | null
+  createdAt: string
+  settlesAt: string
+  settledAt: string | null
 }
 
 export type CartRecord = {
@@ -19,7 +45,7 @@ export type CartRecord = {
   updatedAt: string
 }
 
-const STORAGE_KEY = 'nft-mock-db:v10'
+const STORAGE_KEY = 'nft-mock-db:v12'
 
 export type MockDatabase = {
   nfts: NftRecord[]
@@ -28,6 +54,11 @@ export type MockDatabase = {
   users: UserRecord[]
   sessions: SessionRecord[]
   carts: CartRecord[]
+  wallets: WalletRecord[]
+  walletSessions: WalletSessionRecord[]
+  quotes: QuoteRecord[]
+  orders: OrderRecord[]
+  scenarioFlags: string[]
 }
 
 function createInitialState(): MockDatabase {
@@ -38,6 +69,11 @@ function createInitialState(): MockDatabase {
     users: structuredClone(userFixtures),
     sessions: [],
     carts: [],
+    wallets: structuredClone(walletFixtures),
+    walletSessions: [],
+    quotes: [],
+    orders: [],
+    scenarioFlags: [],
   }
 }
 

@@ -31,7 +31,7 @@ export function CartSummary({ cart, isSyncing }: CartSummaryProps) {
     <section ref={barRef} aria-labelledby="cart-summary-title" className={shellClass}>
       <h2
         id="cart-summary-title"
-        className="sr-only text-sm font-bold md:not-sr-only md:mb-6 md:block md:border-b md:border-foreground/10 md:pb-3"
+        className="sr-only text-sm font-bold md:not-sr-only md:mb-6 md:block md:border-b md:border-primary md:pb-3"
       >
         Resumo da carteira
       </h2>

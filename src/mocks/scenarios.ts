@@ -6,6 +6,11 @@ export const scenarioIds = [
   'server-error',
   'offline',
   'timeout',
+  'wallet-rejected',
+  'payment-refused',
+  'order-timeout',
+  'checkout-price-change',
+  'checkout-sold-out',
 ] as const
 
 export type ScenarioId = (typeof scenarioIds)[number]
@@ -26,6 +31,17 @@ export const scenarios: Record<ScenarioId, ScenarioDefinition> = {
   'server-error': { description: 'Catálogo responde HTTP 500', latency: { min: 120, max: 350 } },
   offline: { description: 'Falha de conexão em todas as requisições', latency: { min: 0, max: 0 } },
   timeout: { description: 'Requisições nunca respondem (timeout do cliente)', latency: { min: 0, max: 0 } },
+  'wallet-rejected': { description: 'A carteira recusa a conexão no checkout', latency: { min: 120, max: 350 } },
+  'payment-refused': { description: 'O pedido é criado e o pagamento é recusado', latency: { min: 120, max: 350 } },
+  'order-timeout': {
+    description: 'O pedido é criado, mas a primeira resposta excede o timeout (recuperação por idempotência)',
+    latency: { min: 120, max: 350 },
+  },
+  'checkout-price-change': {
+    description: 'O preço do primeiro item sobe 10% ao confirmar a compra',
+    latency: { min: 120, max: 350 },
+  },
+  'checkout-sold-out': { description: 'A edição do primeiro item esgota ao confirmar a compra', latency: { min: 120, max: 350 } },
 }
 
 const STORAGE_KEY = 'nft-mock-scenario'

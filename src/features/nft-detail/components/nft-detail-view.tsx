@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useRouter } from '@tanstack/react-router'
 import { ChevronLeft, Heart, Star } from 'lucide-react'
 import { toast } from 'sonner'
@@ -44,6 +44,16 @@ export function NftDetailView({ nft, requestedEditionId, onEditionChange }: NftD
   const requestedUnavailable = Boolean(requestedEditionId) && requestedEditionId !== selected?.id
   const [quantity, setQuantity] = useState(1)
   const [tab, setTab] = useState<DetailTab>('details')
+  const [liveMessage, setLiveMessage] = useState<string | null>(null)
+  const lastVersion = useRef(nft.version)
+
+  useEffect(() => {
+    if (nft.version === lastVersion.current) return
+    lastVersion.current = nft.version
+    setLiveMessage(`Atualizado agora: a partir de ${formatEth(nft.floorPrice, 2)}, ${nft.available} disponíveis.`)
+    const timeout = window.setTimeout(() => setLiveMessage(null), 6_000)
+    return () => window.clearTimeout(timeout)
+  }, [nft.version, nft.floorPrice, nft.available])
 
   const maxQuantity = selected ? Math.min(selected.available, selected.maxPerOrder) : 0
   const effectiveQuantity = Math.min(quantity, Math.max(maxQuantity, 1))
@@ -165,6 +175,10 @@ export function NftDetailView({ nft, requestedEditionId, onEditionChange }: NftD
             <h2 className="hidden text-[13px] font-bold md:block">Sobre este NFT:</h2>
             <p className="text-xs leading-relaxed text-muted-foreground">{nft.description}</p>
           </div>
+
+          <p aria-live="polite" className="min-h-0 text-xs text-highlight empty:hidden">
+            {liveMessage}
+          </p>
 
           {requestedUnavailable && (
             <p role="status" className="text-xs text-warning">

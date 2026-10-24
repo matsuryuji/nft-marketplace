@@ -67,7 +67,10 @@ export const authHandlers = [
   http.delete(`${env.apiUrl}/session`, async ({ request, cookies }) => {
     const network = await simulateNetwork(request)
     if (network) return network
-    revokeSession(cookies[SESSION_COOKIE])
+    const token = cookies[SESSION_COOKIE]
+    const userId = db.state.sessions.find((item) => item.token === token)?.userId
+    if (userId) db.state.walletSessions = db.state.walletSessions.filter((item) => item.userId !== userId)
+    revokeSession(token)
     return new HttpResponse(null, { status: 204, headers: { 'Set-Cookie': clearedSessionCookie } })
   }),
 
@@ -98,6 +101,8 @@ export const authHandlers = [
       displayName: parsed.data.username,
       email,
       avatarUrl: null,
+      ensName: null,
+      walletNickname: parsed.data.username,
       passwordSalt: salt,
       passwordHash: await hashPassword(salt, parsed.data.password),
       createdAt: new Date().toISOString(),

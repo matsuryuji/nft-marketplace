@@ -4,9 +4,10 @@ import { CART_COOKIE } from './fixtures/coupons'
 import { SESSION_COOKIE } from './fixtures/users'
 import { expireAllSessions } from './lib/session'
 import { handlers } from './handlers'
+import { realtimeControls, realtimeHandler } from './realtime/hub'
 import { scenarioIds, scenarios, scenarioStore, type ScenarioId } from './scenarios'
 
-export const worker = setupWorker(...handlers)
+export const worker = setupWorker(...handlers, realtimeHandler)
 
 const mockControls = {
   scenarios: scenarioIds.map((id) => ({ id, ...scenarios[id] })),
@@ -25,6 +26,7 @@ const mockControls = {
   expireSession() {
     expireAllSessions()
   },
+  realtime: realtimeControls,
 }
 
 declare global {

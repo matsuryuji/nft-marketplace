@@ -1,7 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { ComingSoonPage } from '@/shared/components/coming-soon-page'
+import { CheckoutPage } from '@/features/checkout/components/checkout-page'
 
 export const Route = createFileRoute('/_auth/checkout')({
+  staticData: { mobileNav: 'hidden', mobileFooter: 'hidden' },
   head: () => ({ meta: [{ title: 'Pagamento · Kurio' }] }),
-  component: () => <ComingSoonPage title="Pagamento" />,
+  component: CheckoutPage,
 })

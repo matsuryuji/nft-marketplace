@@ -65,5 +65,6 @@ export const applyCouponRequestSchema = z.object({
 
 export type CartItemIssue = (typeof cartItemIssues)[number]
 export type CartItem = z.infer<typeof cartItemSchema>
+export type CartSummary = z.infer<typeof cartSummarySchema>
 export type Cart = z.infer<typeof cartSchema>
 export type AddCartItemRequest = z.infer<typeof addCartItemRequestSchema>

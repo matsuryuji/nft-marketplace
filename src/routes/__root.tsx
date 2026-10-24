@@ -3,9 +3,12 @@ import type { QueryClient } from '@tanstack/react-query'
 import { authSearchSchema } from '@/features/auth/auth-search'
 import { AuthDialog } from '@/features/auth/components/auth-dialog'
 import { SessionWatcher } from '@/features/auth/components/session-watcher'
+import { RealtimeIndicator } from '@/features/realtime/realtime-indicator'
+import { RealtimeProvider } from '@/features/realtime/realtime-provider'
 import { AppFooter } from '@/shared/components/app-footer'
 import { AppHeader } from '@/shared/components/app-header'
 import { MobileBottomNav } from '@/shared/components/mobile-bottom-nav'
+import { cn } from '@/shared/lib/utils'
 import { Toaster } from '@/shared/ui/sonner'
 
 type RouterContext = {
@@ -20,36 +23,44 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 declare module '@tanstack/react-router' {
   interface StaticDataRouteOption {
     mobileNav?: 'hidden' | 'purchase-bar'
+    mobileFooter?: 'hidden'
   }
 }
 
 function RootLayout() {
+  const hideMobileFooter = useMatches({
+    select: (matches) => matches.some((match) => match.staticData.mobileFooter === 'hidden'),
+  })
   const mobileNav = useMatches({
     select: (matches) => [...matches].reverse().find((match) => match.staticData.mobileNav)?.staticData.mobileNav,
   })
 
   return (
-    <div className="flex min-h-dvh flex-col">
-      <HeadContent />
-      <a
-        href="#main-content"
-        className="sr-only z-50 rounded-md bg-primary px-4 py-2 text-primary-foreground focus:not-sr-only focus:fixed focus:top-2 focus:left-2"
-      >
-        Pular para o conteúdo
-      </a>
-      <AppHeader />
-      <main id="main-content" tabIndex={-1} className="flex-1 focus:outline-none">
-        <Outlet />
-      </main>
-      <AppFooter
-        className={
-          mobileNav === 'purchase-bar' ? 'mb-[var(--mobile-bar-height,0px)]' : mobileNav === 'hidden' ? 'mb-0' : undefined
-        }
-      />
-      {!mobileNav && <MobileBottomNav />}
-      <AuthDialog />
-      <SessionWatcher />
-      <Toaster position="top-center" />
-    </div>
+    <RealtimeProvider>
+      <div className="flex min-h-dvh flex-col">
+        <HeadContent />
+        <a
+          href="#main-content"
+          className="sr-only z-50 rounded-md bg-primary px-4 py-2 text-primary-foreground focus:not-sr-only focus:fixed focus:top-2 focus:left-2"
+        >
+          Pular para o conteúdo
+        </a>
+        <AppHeader />
+        <main id="main-content" tabIndex={-1} className="flex-1 focus:outline-none">
+          <Outlet />
+        </main>
+        <AppFooter
+          className={cn(
+            mobileNav === 'purchase-bar' ? 'mb-[var(--mobile-bar-height,0px)]' : mobileNav === 'hidden' ? 'mb-0' : undefined,
+            hideMobileFooter && 'max-md:hidden',
+          )}
+        />
+        {!mobileNav && <MobileBottomNav />}
+        <AuthDialog />
+        <SessionWatcher />
+        <RealtimeIndicator />
+        <Toaster position="top-center" />
+      </div>
+    </RealtimeProvider>
   )
 }
