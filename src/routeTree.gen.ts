@@ -17,6 +17,7 @@ import { Route as RegisterRouteImport } from './routes/register'
 import { Route as AuthAccountRouteImport } from './routes/_auth/_account'
 import { Route as AuthCheckoutRouteImport } from './routes/_auth/checkout'
 import { Route as NftsNftIdRouteImport } from './routes/nfts/$nftId'
+import { Route as AuthAccountCollectionRouteImport } from './routes/_auth/_account/collection'
 import { Route as AuthAccountFavoritesRouteImport } from './routes/_auth/_account/favorites'
 import { Route as AuthAccountProfileRouteImport } from './routes/_auth/_account/profile'
 import { Route as AuthAccountWalletsRouteImport } from './routes/_auth/_account/wallets'
@@ -60,6 +61,11 @@ const NftsNftIdRoute = NftsNftIdRouteImport.update({
   path: '/nfts/$nftId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthAccountCollectionRoute = AuthAccountCollectionRouteImport.update({
+  id: '/collection',
+  path: '/collection',
+  getParentRoute: () => AuthAccountRoute,
+} as any)
 const AuthAccountFavoritesRoute = AuthAccountFavoritesRouteImport.update({
   id: '/favorites',
   path: '/favorites',
@@ -88,6 +94,7 @@ export interface FileRoutesByFullPath {
   '/register': typeof RegisterRoute
   '/checkout': typeof AuthCheckoutRoute
   '/nfts/$nftId': typeof NftsNftIdRoute
+  '/collection': typeof AuthAccountCollectionRoute
   '/favorites': typeof AuthAccountFavoritesRoute
   '/profile': typeof AuthAccountProfileRoute
   '/wallets': typeof AuthAccountWalletsRoute
@@ -100,6 +107,7 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterRoute
   '/checkout': typeof AuthCheckoutRoute
   '/nfts/$nftId': typeof NftsNftIdRoute
+  '/collection': typeof AuthAccountCollectionRoute
   '/favorites': typeof AuthAccountFavoritesRoute
   '/profile': typeof AuthAccountProfileRoute
   '/wallets': typeof AuthAccountWalletsRoute
@@ -115,6 +123,7 @@ export interface FileRoutesById {
   '/_auth/_account': typeof AuthAccountRouteWithChildren
   '/_auth/checkout': typeof AuthCheckoutRoute
   '/nfts/$nftId': typeof NftsNftIdRoute
+  '/_auth/_account/collection': typeof AuthAccountCollectionRoute
   '/_auth/_account/favorites': typeof AuthAccountFavoritesRoute
   '/_auth/_account/profile': typeof AuthAccountProfileRoute
   '/_auth/_account/wallets': typeof AuthAccountWalletsRoute
@@ -129,6 +138,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/checkout'
     | '/nfts/$nftId'
+    | '/collection'
     | '/favorites'
     | '/profile'
     | '/wallets'
@@ -141,6 +151,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/checkout'
     | '/nfts/$nftId'
+    | '/collection'
     | '/favorites'
     | '/profile'
     | '/wallets'
@@ -155,6 +166,7 @@ export interface FileRouteTypes {
     | '/_auth/_account'
     | '/_auth/checkout'
     | '/nfts/$nftId'
+    | '/_auth/_account/collection'
     | '/_auth/_account/favorites'
     | '/_auth/_account/profile'
     | '/_auth/_account/wallets'
@@ -228,6 +240,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NftsNftIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_auth/_account/collection': {
+      id: '/_auth/_account/collection'
+      path: '/collection'
+      fullPath: '/collection'
+      preLoaderRoute: typeof AuthAccountCollectionRouteImport
+      parentRoute: typeof AuthAccountRoute
+    }
     '/_auth/_account/favorites': {
       id: '/_auth/_account/favorites'
       path: '/favorites'
@@ -260,12 +279,14 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthAccountRouteChildren {
+  AuthAccountCollectionRoute: typeof AuthAccountCollectionRoute
   AuthAccountFavoritesRoute: typeof AuthAccountFavoritesRoute
   AuthAccountProfileRoute: typeof AuthAccountProfileRoute
   AuthAccountWalletsRoute: typeof AuthAccountWalletsRoute
 }
 
 const AuthAccountRouteChildren: AuthAccountRouteChildren = {
+  AuthAccountCollectionRoute: AuthAccountCollectionRoute,
   AuthAccountFavoritesRoute: AuthAccountFavoritesRoute,
   AuthAccountProfileRoute: AuthAccountProfileRoute,
   AuthAccountWalletsRoute: AuthAccountWalletsRoute,

@@ -18,7 +18,7 @@ src/
   mocks/          MSW: db em localStorage, fixtures, handlers, hub realtime, cenários
 ```
 
-- **Roteamento**: rotas de arquivo com `autoCodeSplitting`. O estado de URL (filtros, busca, ordenação, página, modal de auth) é validado com Zod em `validateSearch`. Parâmetros padrão são removidos da URL (`stripSearchParams`) e arrays usam chaves repetidas (`?network=ethereum&network=polygon`). Áreas autenticadas ficam sob o layout `_auth` (e `_auth/_account` para perfil, carteiras e favoritos). Rotas inexistentes caem em uma página 404.
+- **Roteamento**: rotas de arquivo com `autoCodeSplitting`. O estado de URL (filtros, busca, ordenação, página, modal de auth) é validado com Zod em `validateSearch`. Parâmetros padrão são removidos da URL (`stripSearchParams`) e arrays usam chaves repetidas (`?network=ethereum&network=polygon`). Áreas autenticadas ficam sob o layout `_auth` (e `_auth/_account` para perfil, carteiras, coleção e favoritos). Rotas inexistentes caem em uma página 404.
 - **Layout por rota**: `staticData` de cada rota controla o chrome compartilhado:
   - `mobileNav`: barra inferior ou barra de compra;
   - `mobileFooter`: esconde o footer só no mobile, como no checkout;
@@ -44,6 +44,7 @@ Todos ficam sob `VITE_API_URL` (padrão `/api`), em JSON, validados nas duas pon
 | Carteiras | `GET /wallets` · `PUT /wallets/:slot` (`primary`/`secondary`) · `GET/POST/DELETE /wallet-sessions/current` |
 | Perfil | `GET/PATCH /profile` · `PUT /profile/password` · `PUT/DELETE /profile/avatar` |
 | Favoritos | `GET /favorites` · `PUT/DELETE /favorites/:nftId` |
+| Coleção | `GET /collection` (NFTs dos pedidos confirmados, agregados por edição, e quantidade de pedidos pendentes) |
 
 Códigos de erro representados:
 
@@ -113,6 +114,15 @@ O cliente usa Socket.IO em `VITE_SOCKET_URL`, interceptado por `@mswjs/socket.io
 - **Falhas recuperáveis**: a recusa da carteira e a do pagamento mostram um erro que permite tentar de novo sem perder o formulário.
 - **Pedido**: guarda um snapshot dos itens, do cupom e do resumo. O recibo não muda com alterações posteriores do catálogo. Depois da confirmação, só os itens e quantidades comprados saem do carrinho.
 
+## Minha coleção
+
+Os pedidos ficam persistidos no banco simulado por usuário. A aba "Minha coleção" (`/collection`, também no link do footer) mostra os NFTs adquiridos:
+- só entram pedidos **confirmados**; recusados e pendentes ficam de fora, e os pendentes aparecem como aviso ("compra aguardando confirmação na rede");
+- compras repetidas da mesma edição são somadas, com o total pago;
+- cada card mostra edição, rede e data da última aquisição, com link para o NFT e para o recibo dessa compra.
+
+Os dados vêm do snapshot dos pedidos, então mudanças posteriores de preço no catálogo não alteram a coleção.
+
 ## Cache, retries e sincronização
 
 | Dado | `staleTime` | Observação |
@@ -120,7 +130,7 @@ O cliente usa Socket.IO em `VITE_SOCKET_URL`, interceptado por `@mswjs/socket.io
 | padrão | 30 s | `refetchOnWindowFocus`, `gcTime` 5 min |
 | home, detalhe de NFT | 5 min | patches em tempo real mantêm preço e estoque atuais |
 | carrinho | 10 s | guard de versão |
-| favoritos, perfil, carteiras, reviews | 60 s | |
+| favoritos, coleção, perfil, carteiras, reviews | 60 s | a coleção é invalidada ao criar um pedido e quando ele fica confirmado ou recusado |
 | cotação do checkout | ∞ enquanto a página está aberta | `gcTime: 0`, sem retry; revalidada ao confirmar e quando o carrinho muda |
 | pedido | — | polling a cada 1,5 s enquanto pendente, além de `order.updated` |
 
@@ -197,11 +207,11 @@ Os testes rodam no Playwright contra o build de produção (`vite preview` na po
 - `desktop` (1440×900);
 - `mobile` (390×844), que roda os testes marcados com `@responsive`.
 
-São 43 testes. Com os responsivos executados nos dois projetos, a suíte roda 63 casos e cobre:
+São 45 testes. Com os responsivos executados nos dois projetos, a suíte roda 66 casos e cobre:
 - catálogo, detalhe, estados de carregamento e erro;
 - auth, carrinho (incluindo o merge do visitante), checkout feliz e compra com vários NFTs após revisitar o checkout;
 - falhas de checkout: carteira recusada, pagamento recusado, clique repetido, timeout com idempotência, preço alterado e esgotado;
-- favoritos com rollback, conta e realtime (patch, duplicado, versão antiga, reconexão com pedido pendente);
+- favoritos com rollback, coleção (compra confirmada entra, recusada não), conta e realtime (patch, duplicado, versão antiga, reconexão com pedido pendente);
 - acessibilidade com axe e regressão visual. As baselines ficam em `e2e/__screenshots__` e foram geradas em macOS (sufixo `-darwin`); em Linux/CI é preciso gerar as `-linux` com `pnpm test:e2e:update`.
 
 Cada teste roda num contexto isolado. Os cenários sensíveis a tempo são determinísticos:

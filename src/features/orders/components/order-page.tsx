@@ -4,6 +4,7 @@ import { Link, useRouter } from '@tanstack/react-router'
 import { Loader2, X, XCircle } from 'lucide-react'
 import { useSession } from '@/features/auth/session'
 import { cartKey } from '@/features/cart/queries'
+import { collectionKey } from '@/features/collection/queries'
 import { useOrder } from '@/features/checkout/queries'
 import { toApiError } from '@/shared/api/errors'
 import { NotFoundPage } from '@/shared/components/not-found-page'
@@ -216,7 +217,9 @@ export function OrderPage({ orderId }: { orderId: string }) {
   const status = query.data?.status
 
   useEffect(() => {
-    if (status && status !== 'pending' && user) void queryClient.invalidateQueries({ queryKey: cartKey(user.id) })
+    if (!status || status === 'pending' || !user) return
+    void queryClient.invalidateQueries({ queryKey: cartKey(user.id) })
+    void queryClient.invalidateQueries({ queryKey: collectionKey(user.id) })
   }, [status, user, queryClient])
 
   if (query.isError) {

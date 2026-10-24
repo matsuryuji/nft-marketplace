@@ -101,7 +101,7 @@ export function AppFooter({ className }: { className?: string }) {
               </Link>
             </li>
             <li>
-              <Link to="/favorites" className={linkClass}>
+              <Link to="/collection" className={linkClass}>
                 Minha coleção
               </Link>
             </li>

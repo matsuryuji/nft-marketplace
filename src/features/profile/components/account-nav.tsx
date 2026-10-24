@@ -1,16 +1,17 @@
 import type { ComponentType } from 'react'
 import { Link } from '@tanstack/react-router'
-import { BadgePercent, Download, Heart, LogOut, MapPin, ShoppingCart, TriangleAlert, UserRound } from 'lucide-react'
+import { BadgePercent, Download, Gem, Heart, LogOut, MapPin, ShoppingCart, TriangleAlert, UserRound } from 'lucide-react'
 import { useSignOut } from '@/features/auth/use-sign-out'
 import { cn } from '@/shared/lib/utils'
 
 type NavItem =
-  | { label: string; Icon: ComponentType<{ className?: string }>; to: '/profile' | '/wallets' | '/favorites' }
+  | { label: string; Icon: ComponentType<{ className?: string }>; to: '/profile' | '/wallets' | '/collection' | '/favorites' }
   | { label: string; Icon: ComponentType<{ className?: string }>; to?: undefined }
 
 const items: NavItem[] = [
   { label: 'Dados do perfil', Icon: UserRound, to: '/profile' },
   { label: 'Carteiras', Icon: MapPin, to: '/wallets' },
+  { label: 'Minha coleção', Icon: Gem, to: '/collection' },
   { label: 'Atividade', Icon: ShoppingCart },
   { label: 'Lista de interesse', Icon: Heart, to: '/favorites' },
   { label: 'Ofertas', Icon: BadgePercent },

@@ -1,6 +1,7 @@
 import type { QueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { cartKey } from '@/features/cart/queries'
+import { collectionKey } from '@/features/collection/queries'
 import { nftKeys } from '@/features/catalog/queries'
 import { checkoutKeys } from '@/features/checkout/queries'
 import { favoritesKey } from '@/features/favorites/queries'
@@ -67,6 +68,7 @@ export function applyOrderUpdated(queryClient: QueryClient, userId: string | nul
 
   if (event.data.order.status === 'pending') return
   void queryClient.invalidateQueries({ queryKey: cartKey(userId) })
+  void queryClient.invalidateQueries({ queryKey: collectionKey(userId) })
   if (previous || isOnOrderPage(event.data.order.id)) return
   const confirmed = event.data.order.status === 'confirmed'
   toast[confirmed ? 'success' : 'error'](confirmed ? 'Seu pedido foi confirmado.' : 'Seu pedido foi recusado.', {

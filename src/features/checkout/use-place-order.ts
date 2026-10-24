@@ -3,6 +3,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from '@tanstack/react-router'
 import { useSession } from '@/features/auth/session'
 import { cartKey } from '@/features/cart/queries'
+import { collectionKey } from '@/features/collection/queries'
 import { useConnectWallet, useUpsertWallet, useWallets, useWalletSession } from '@/features/wallets/queries'
 import { ApiError, toApiError } from '@/shared/api/errors'
 import type { Buyer, Order, Quote } from '@/shared/contracts/checkout'
@@ -112,6 +113,7 @@ export function usePlaceOrder() {
     queryClient.setQueryData(checkoutKeys.order(userId, order.id), order)
     queryClient.removeQueries({ queryKey: quoteKey })
     void queryClient.invalidateQueries({ queryKey: cartKey(userId) })
+    void queryClient.invalidateQueries({ queryKey: collectionKey(userId) })
     setState(idle)
     await router.navigate({ to: '/orders/$orderId', params: { orderId: order.id } })
   }
