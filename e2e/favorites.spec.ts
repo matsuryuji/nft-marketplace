@@ -19,8 +19,16 @@ test.describe('Favoritos', () => {
     await app.setScenario('favorites-error')
     const sageButton = app.catalogCard('Sage Nomad #009').getByRole('button', { name: /lista de interesse/ })
     await expect(sageButton).toHaveAttribute('aria-pressed', 'true')
+    const optimisticRemoval = sageButton.evaluate(
+      (button) =>
+        new Promise<boolean>((resolve) => {
+          new MutationObserver(() => {
+            if (button.getAttribute('aria-pressed') === 'false') resolve(true)
+          }).observe(button, { attributes: true, attributeFilter: ['aria-pressed'] })
+        }),
+    )
     await sageButton.click()
-    await expect(sageButton).toHaveAttribute('aria-pressed', 'false')
+    expect(await optimisticRemoval).toBe(true)
     const errorToast = app.toast('Não foi possível remover dos favoritos.')
     await expect(errorToast).toBeVisible()
     await expect(sageButton).toHaveAttribute('aria-pressed', 'true')

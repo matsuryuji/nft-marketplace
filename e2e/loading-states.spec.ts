@@ -2,9 +2,17 @@ import { expect, test } from './support/fixtures'
 
 test.describe('Carregamento, falha e recuperação', () => {
   test('skeletons durante carregamento lento @responsive', async ({ app, page }) => {
+    await page.addInitScript(() => {
+      const observer = new MutationObserver(() => {
+        if (!document.querySelector('[role="status"][aria-label="Carregando NFTs"]')) return
+        document.documentElement.dataset.sawCatalogSkeleton = 'true'
+        observer.disconnect()
+      })
+      observer.observe(document, { subtree: true, childList: true })
+    })
     await app.goto('/', { scenario: 'slow' })
-    await expect(page.getByRole('status', { name: 'Carregando NFTs' }).first()).toBeVisible()
     await expect(page.getByText('72 NFTs encontrados')).toBeVisible({ timeout: 10_000 })
+    await expect(page.locator('html')).toHaveAttribute('data-saw-catalog-skeleton', 'true')
     await expect(page.getByRole('status', { name: 'Carregando NFTs' })).toHaveCount(0)
   })
 

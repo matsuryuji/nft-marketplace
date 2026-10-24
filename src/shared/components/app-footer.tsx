@@ -65,7 +65,7 @@ export function AppFooter({ className }: { className?: string }) {
           {benefits.map((benefit, index) => (
             <div
               key={benefit.title}
-              className={index > 0 ? 'lg:border-l-2 lg:border-primary lg:pl-3.5' : 'lg:pr-3.5'}
+              className={cn('max-sm:flex max-sm:flex-col max-sm:items-center max-sm:text-center', index > 0 ? 'lg:border-l-2 lg:border-primary lg:pl-3.5' : 'lg:pr-3.5')}
             >
               <span
                 aria-hidden="true"

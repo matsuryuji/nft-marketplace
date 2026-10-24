@@ -353,6 +353,30 @@ export function CheckoutPage() {
 
           {providerOptions}
 
+          <section aria-labelledby="mobile-order-items-title" className="space-y-3 md:hidden">
+            <h2 id="mobile-order-items-title" className="text-base font-bold">
+              Seus NFTs
+            </h2>
+            {quote.data ? (
+              <ul className="space-y-2">
+                {quote.data.items.map((item) => (
+                  <li key={item.editionId} className="flex items-center gap-3 rounded-2xl bg-surface p-2 pr-4">
+                    <img src={item.image.url} alt="" width={item.image.width} height={item.image.height} className="size-12 shrink-0 rounded-xl object-cover" />
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-bold">{item.name}</p>
+                      <p className="truncate text-xs text-muted-foreground">
+                        Edição {item.editionLabel} · <span className="sr-only">Quantidade: </span>x {item.quantity}
+                      </p>
+                    </div>
+                    <span className="text-sm font-bold whitespace-nowrap text-highlight">{formatEth(item.lineTotal, 4)}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <Skeleton className="h-16 w-full rounded-2xl" />
+            )}
+          </section>
+
           <div className="flex items-baseline justify-end gap-6 text-base font-bold md:hidden" aria-live="polite">
             <span>Total:</span>
             {quote.data ? (

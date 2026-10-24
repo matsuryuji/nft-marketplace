@@ -186,16 +186,26 @@ export function NftDetailView({ nft, requestedEditionId, onEditionChange }: NftD
             }}
           />
 
-          <div className="hidden items-start justify-between gap-3 md:flex">
+          <div className="hidden flex-wrap items-start justify-between gap-3 md:flex">
             <QuantityStepper value={effectiveQuantity} max={maxQuantity} onChange={updateQuantity} disabled={soldOut} />
             <div className="flex gap-2">
               <button
                 type="button"
                 disabled={purchaseDisabled}
                 onClick={() => addSelected('cart')}
-                className="h-9 rounded-[4px] bg-primary px-8 text-xs font-bold text-primary-foreground uppercase transition-opacity hover:opacity-90 disabled:opacity-50"
+                className="h-9 rounded-[4px] bg-primary px-6 lg:px-8 text-xs font-bold text-primary-foreground uppercase transition-opacity hover:opacity-90 disabled:opacity-50"
               >
                 {soldOut ? 'Esgotado' : addToCart.isPending ? 'Adicionando…' : 'Comprar'}
+              </button>
+              <button
+                type="button"
+                disabled={purchaseDisabled}
+                onClick={() => addSelected('stay')}
+                aria-label="Adicionar ao carrinho"
+                title="Adicionar ao carrinho"
+                className="flex size-9 items-center justify-center rounded-[4px] border border-primary text-primary transition-colors hover:bg-primary/10 disabled:opacity-50"
+              >
+                <CartIcon className="size-4" />
               </button>
               <FavoriteButton nft={nft} variant="outline" />
             </div>

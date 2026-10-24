@@ -14,6 +14,7 @@ export const quoteQuery = (userId: string) =>
     queryKey: checkoutKeys.quote(userId),
     queryFn: () => createQuote(),
     staleTime: Infinity,
+    gcTime: 0,
     refetchOnWindowFocus: false,
     retry: false,
   })

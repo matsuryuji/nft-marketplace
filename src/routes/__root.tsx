@@ -68,7 +68,11 @@ function RootLayout() {
           Pular para o conteúdo
         </a>
         <AppHeader />
-        <main id="main-content" tabIndex={-1} className="min-h-dvh flex-1 focus:outline-none">
+        <main
+          id="main-content"
+          tabIndex={-1}
+          className={cn('min-h-dvh flex-1 focus:outline-none', hideFooter && !mobileNav && 'max-md:pb-20')}
+        >
           <Outlet />
         </main>
         {!hideFooter && (
