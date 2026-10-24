@@ -23,7 +23,7 @@ export function CatalogSection({ aside }: { aside?: ReactNode }) {
   const query = useQuery(nftListQuery(toNftListParams(search)))
 
   return (
-    <section id="catalogo" aria-labelledby="catalog-title" className="scroll-mt-20">
+    <section id="catalog" aria-labelledby="catalog-title" className="scroll-mt-20">
       <h2 id="catalog-title" className="sr-only">
         Catálogo de NFTs
       </h2>

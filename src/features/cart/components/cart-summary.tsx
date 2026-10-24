@@ -87,7 +87,7 @@ export function CartSummary({ cart, isSyncing }: CartSummaryProps) {
         )}
         <Link
           to="/"
-          hash="catalogo"
+          hash="catalog"
           className="hidden text-center text-primary hover:underline md:block md:text-xs"
         >
           Continuar explorando

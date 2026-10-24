@@ -94,7 +94,7 @@ export class App {
   }
 
   catalogCard(name: string) {
-    return this.page.locator('#catalogo article').filter({ hasText: name })
+    return this.page.locator('#catalog article').filter({ hasText: name })
   }
 
   toast(text: string | RegExp) {

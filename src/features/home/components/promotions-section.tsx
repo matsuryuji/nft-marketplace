@@ -23,7 +23,7 @@ export function PromotionsSection({ promotions }: { promotions: Promotion[] }) {
             <Link
               to="/"
               search={{ ...promotion.catalogLink }}
-              hash="catalogo"
+              hash="catalog"
               className="inline-flex h-9 items-center gap-2 rounded-md bg-primary px-4 text-xs font-bold text-primary-foreground hover:opacity-90"
             >
               {promotion.ctaLabel}

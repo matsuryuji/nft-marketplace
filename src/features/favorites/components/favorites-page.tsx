@@ -36,7 +36,7 @@ export function FavoritesPage() {
           <Heart className="size-8 text-primary" aria-hidden="true" />
           <p className="font-bold">Você ainda não favoritou nenhum NFT</p>
           <p className="text-xs text-muted-foreground">Toque no coração de um NFT para guardá-lo aqui.</p>
-          <Link to="/" hash="catalogo" className="mt-2 rounded-[4px] bg-primary px-5 py-2 text-sm font-bold text-primary-foreground hover:opacity-90">
+          <Link to="/" hash="catalog" className="mt-2 rounded-[4px] bg-primary px-5 py-2 text-sm font-bold text-primary-foreground hover:opacity-90">
             Explorar NFTs
           </Link>
         </div>

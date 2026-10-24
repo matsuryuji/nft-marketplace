@@ -8,7 +8,7 @@ const gridClass = 'grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4'
 function SectionHeading() {
   return (
     <div className="space-y-2 text-center">
-      <h2 id="diario-title" className="text-xl font-bold sm:text-2xl">
+      <h2 id="journal-title" className="text-xl font-bold sm:text-2xl">
         Diário da Cunhagem
       </h2>
       <p className="text-xs text-muted-foreground">
@@ -20,7 +20,7 @@ function SectionHeading() {
 
 export function JournalSection({ articles }: { articles: Article[] }) {
   return (
-    <section id="diario" aria-labelledby="diario-title" className="scroll-mt-20 space-y-6">
+    <section id="journal" aria-labelledby="journal-title" className="scroll-mt-20 space-y-6">
       <SectionHeading />
       <ul className={gridClass}>
         {articles.map((article) => (
@@ -62,7 +62,7 @@ export function JournalSection({ articles }: { articles: Article[] }) {
 
 export function JournalSkeleton() {
   return (
-    <section aria-labelledby="diario-title" className="space-y-6">
+    <section aria-labelledby="journal-title" className="space-y-6">
       <SectionHeading />
       <div className={gridClass} role="status" aria-label="Carregando artigos">
         {[0, 1, 2, 3].map((key) => (

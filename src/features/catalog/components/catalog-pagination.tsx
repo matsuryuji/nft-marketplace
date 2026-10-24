@@ -24,7 +24,7 @@ export function CatalogPagination({ page, totalPages }: CatalogPaginationProps) 
     <Link
       from="/"
       search={(prev) => ({ ...prev, page: target })}
-      hash="catalogo"
+      hash="catalog"
       activeOptions={{ exact: true }}
       className={itemClass}
       aria-label={label}
@@ -42,7 +42,7 @@ export function CatalogPagination({ page, totalPages }: CatalogPaginationProps) 
             <Link
               from="/"
               search={(prev) => ({ ...prev, page: item })}
-              hash="catalogo"
+              hash="catalog"
               activeOptions={{ exact: true }}
               aria-label={`Página ${item}`}
               aria-current={item === page ? 'page' : undefined}

@@ -38,7 +38,7 @@ export function SearchDialog({ trigger }: { trigger: ReactNode }) {
             event.preventDefault()
             const q = term.trim() || undefined
             setOpen(false)
-            navigate({ to: '/', search: { q }, hash: 'catalogo' })
+            navigate({ to: '/', search: { q }, hash: 'catalog' })
           }}
         >
           <label htmlFor="global-search" className="sr-only">

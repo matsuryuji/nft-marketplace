@@ -103,7 +103,7 @@ export function NftDetailView({ nft, requestedEditionId, onEditionChange }: NftD
           </li>
           <li aria-hidden="true">/</li>
           <li>
-            <Link to="/" hash="catalogo" className="hover:text-highlight">
+            <Link to="/" hash="catalog" className="hover:text-highlight">
               Mercado
             </Link>
           </li>

@@ -200,7 +200,7 @@ export function CheckoutPage() {
         <ShoppingBag className="size-8 text-primary" aria-hidden="true" />
         <h1 className="text-lg font-bold">Seu carrinho está vazio</h1>
         <p className="text-sm text-muted-foreground">Adicione NFTs ao carrinho para finalizar uma compra.</p>
-        <Link to="/" hash="catalogo" className="mt-2 rounded-[4px] bg-primary px-5 py-2 text-sm font-bold text-primary-foreground">
+        <Link to="/" hash="catalog" className="mt-2 rounded-[4px] bg-primary px-5 py-2 text-sm font-bold text-primary-foreground">
           Explorar NFTs
         </Link>
       </div>
@@ -224,7 +224,7 @@ export function CheckoutPage() {
           </li>
           <li aria-hidden="true">/</li>
           <li>
-            <Link to="/" hash="catalogo" className="hover:text-highlight">
+            <Link to="/" hash="catalog" className="hover:text-highlight">
               Mercado
             </Link>
           </li>

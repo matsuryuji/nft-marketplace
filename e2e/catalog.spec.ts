@@ -27,7 +27,7 @@ test.describe('Catálogo', () => {
     await page.goto('/?sort=price-asc')
     await app.ready()
     await expect(results).toHaveText('72 NFTs encontrados')
-    const firstPrice = page.locator('#catalogo article').first()
+    const firstPrice = page.locator('#catalog article').first()
     await expect(firstPrice).toContainText('0.02 ETH')
 
     await page.getByRole('link', { name: 'Página 2' }).click()

@@ -127,7 +127,7 @@ export function AppFooter({ className }: { className?: string }) {
           <FooterColumn title="Coleções">
             {footerCategories.map((category) => (
               <li key={category}>
-                <Link to="/" search={{ category: [category] }} hash="catalogo" className={linkClass}>
+                <Link to="/" search={{ category: [category] }} hash="catalog" className={linkClass}>
                   {categoryLabels[category]}
                 </Link>
               </li>

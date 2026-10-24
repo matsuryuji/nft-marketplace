@@ -16,7 +16,7 @@ function EmptyCart() {
       <p className="text-xs text-muted-foreground">Explore o catálogo e adicione edições ao carrinho.</p>
       <Link
         to="/"
-        hash="catalogo"
+        hash="catalog"
         className="mt-2 inline-flex h-9 items-center rounded-[4px] bg-primary px-5 text-sm font-bold text-primary-foreground hover:opacity-90"
       >
         Explorar NFTs
@@ -51,7 +51,7 @@ export function CartPage() {
           </li>
           <li aria-hidden="true">/</li>
           <li>
-            <Link to="/" hash="catalogo" className="hover:text-highlight">
+            <Link to="/" hash="catalog" className="hover:text-highlight">
               Mercado
             </Link>
           </li>
