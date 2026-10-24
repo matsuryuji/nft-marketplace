@@ -65,12 +65,12 @@ export function OrderReview({ quote, isRefreshing }: { quote: Quote; isRefreshin
           <dt>Desconto do lançamento</dt>
           <dd className="text-xs tabular-nums">(-) {formatEthAmount(quote.summary.discount, 6)}</dd>
         </div>
-        <div>
-          <div className={rowClass}>
-            <dt>Taxa de rede</dt>
-            <dd className="text-sm tabular-nums">{formatEth(quote.summary.networkFee, 6)}</dd>
-          </div>
-          <p className="mt-1 text-center text-[10px] text-highlight">Taxa estimada</p>
+        <div className={rowClass}>
+          <dt>Taxa de rede</dt>
+          <dd className="text-right text-sm tabular-nums">
+            {formatEth(quote.summary.networkFee, 6)}
+            <span className="block text-[10px] text-highlight">Taxa estimada</span>
+          </dd>
         </div>
         <div className="flex items-baseline justify-around gap-3 border-t border-primary pt-3 font-bold">
           <dt className="text-[13px]">Total</dt>

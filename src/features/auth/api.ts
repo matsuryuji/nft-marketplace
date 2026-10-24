@@ -5,7 +5,7 @@ import { sessionSchema, type LoginRequest, type RegisterRequest } from '@/shared
 export async function fetchSession(signal?: AbortSignal) {
   try {
     const { data } = await http.get('/session', { signal, skipSessionExpiry: true })
-    return parseResponse(sessionSchema, data)
+    return parseResponse(sessionSchema.nullable(), data)
   } catch (error) {
     if (error instanceof ApiError && error.status === 401) return null
     throw error

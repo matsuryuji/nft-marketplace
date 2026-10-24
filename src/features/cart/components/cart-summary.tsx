@@ -47,12 +47,12 @@ export function CartSummary({ cart, isSyncing }: CartSummaryProps) {
           <dt>Desconto do lançamento</dt>
           <dd className="tabular-nums">(-) {formatEthAmount(summary.discount, 6)}</dd>
         </div>
-        <div>
-          <div className={rowClass}>
-            <dt>Taxa de rede</dt>
-            <dd className="tabular-nums">{formatEth(summary.networkFee, 6)}</dd>
-          </div>
-          <p className="text-right text-[10px] text-highlight">Taxa estimada</p>
+        <div className={rowClass}>
+          <dt>Taxa de rede</dt>
+          <dd className="text-right tabular-nums">
+            {formatEth(summary.networkFee, 6)}
+            <span className="block text-[10px] text-highlight">Taxa estimada</span>
+          </dd>
         </div>
         <div className={cn(rowClass, 'border-t border-foreground/10 pt-2 font-bold md:mt-4 md:pt-3')}>
           <dt className="text-base md:text-sm">Total</dt>

@@ -25,3 +25,12 @@ dist-ssr
 
 .env
 .tanstack
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# Lighthouse
+/lighthouse/reports/runs/

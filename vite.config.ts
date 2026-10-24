@@ -10,6 +10,9 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  build: {
+    sourcemap: true,
+  },
   resolve: {
     alias: { '@': path.resolve(__dirname, './src') },
   },

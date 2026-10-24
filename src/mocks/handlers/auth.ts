@@ -35,6 +35,7 @@ export const authHandlers = [
   http.get(`${env.apiUrl}/session`, async ({ request, cookies }) => {
     const network = await simulateNetwork(request)
     if (network) return network
+    if (!cookies[SESSION_COOKIE]) return HttpResponse.json(null)
     const result = requireSession(cookies)
     if (!result.ok) return result.response
     return HttpResponse.json({ user: toUser(result.user), expiresAt: result.expiresAt })

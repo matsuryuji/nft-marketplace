@@ -36,9 +36,9 @@ declare global {
 }
 
 export async function startMockWorker() {
-  window.__mocks = mockControls
   await worker.start({
     onUnhandledRequest: 'bypass',
     quiet: import.meta.env.PROD,
   })
+  window.__mocks = mockControls
 }

@@ -2,6 +2,7 @@ import axios, { isAxiosError, isCancel } from 'axios'
 import type { z } from 'zod'
 import { env } from '@/shared/config/env'
 import { ApiError, toApiError } from './errors'
+import { whenTransportReady } from './transport'
 
 export const http = axios.create({
   baseURL: env.apiUrl,
@@ -26,6 +27,11 @@ export function onSessionExpired(listener: SessionExpiredListener) {
     if (sessionExpiredListener === listener) sessionExpiredListener = null
   }
 }
+
+http.interceptors.request.use(async (config) => {
+  await whenTransportReady()
+  return config
+})
 
 http.interceptors.response.use(
   (response) => response,
